@@ -46,9 +46,12 @@ def graph_search(
     # Clear the parent pointer and cost in order make sure that the initial state is a root node
     initial_state.parent = None
     initial_state.path_cost = 0
-    exSet=set()
+
     frontier.add(initial_state)
-    while frontier.is_empty() == False:
+
+    exSet=set()
+    print("this is the frontier", frontier)
+    while not frontier.is_empty():
         lnode = frontier.pop()
         iterations=iterations+1
         if goal_description.is_goal(lnode):
