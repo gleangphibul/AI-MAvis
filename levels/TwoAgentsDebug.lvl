@@ -1,16 +1,16 @@
 #domain
 hospital
 #levelname
-SimpleDebug
+TwoAgentsDebug
 #colors
-blue: 0
+blue: 0,1,2
 #initial
 ++++++++
-+      +
++    2 +
 +      +
 + 0    +
 +      +
-+      +
++ 1    +
 +      +
 ++++++++
 #goal
@@ -20,6 +20,6 @@ blue: 0
 +      +
 +      +
 +    0 +
-+      +
++  1   +
 ++++++++
 #end
