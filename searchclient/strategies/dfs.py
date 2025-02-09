@@ -22,7 +22,8 @@ class FrontierDFS:
 
     def __init__(self):
         # Your code here...
-        pass
+        self.stack = deque()
+        self.set = set()
         
 
     def prepare(self, goal_description: h_goal_description.HospitalGoalDescription):
@@ -30,23 +31,27 @@ class FrontierDFS:
         # searches, prepares must ensure that state is cleared.
         
         # Your code here...
-        raise NotImplementedError()
-
+        self.stack.clear()
+        self.set.clear()
 
     def add(self, state: h_state.HospitalState):
         # Your code here...
-        raise NotImplementedError()
+        self.stack.append(state)
+        self.set.add(state)
 
     def pop(self) -> h_state.HospitalState:
         # Your code here...
-        raise NotImplementedError()
+        state = self.stack.pop()
+        self.set.remove(state)
+        return state
         
     def is_empty(self) -> bool:
         # Your code here...
-        raise NotImplementedError()
+        return len(self.stack) == 0
+
     def size(self) -> int:  
         # Your code here...
-        raise NotImplementedError()
+        return len(self.stack)
         
     def contains(self, state: h_state.HospitalState) -> bool:
-        raise NotImplementedError()
+        return state in self.set

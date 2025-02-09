@@ -46,12 +46,37 @@ def graph_search(
     # Clear the parent pointer and cost in order make sure that the initial state is a root node
     initial_state.parent = None
     initial_state.path_cost = 0
+    
+    '''
+    Implement the Graph-Search algorithm from R&N figure 3.7
+    The algorithm should here return a (boolean, list[list[actions.AnyAction]], int, float) tuple, 
+    where the boolean denotes whether the algorithm successfully found a plan, the list of lists 
+    is the found plan, the integer is the number of states generated and the float is the amount of time
+    elapsed. You can look at the print_search_status to find out how to get those quantities.
+
+    You will need the following methods. 
+    From the HospitalState class:
+        state.extract_plan() - Returns the list of actions used to reach this state.
+        state.get_applicable_actions(action_set) - Returns a list containing the actions applicable in the state.
+        state.result(action) - Returns the new state reached by applying the action to the current state.
+    From the HospitalGoalDescription class:
+        goal_description.is_goal(node) - Returns true if the state is a goal state.
+    From the FrontierBFS class:
+        frontier.is_empty() - returns whether the frontier is emtpy
+        frontier.pop() - pops the next node from the frontier, according to the search strategy
+        frontier.add(state) - adds a state to the frontier, according to the search strategy
+        frontier.contains(state) - checks whether the state is already present in the frontier
+
+    Remember to look more into the different classes to see if there is any other 
+    existing method that might help you out!    
+    '''
 
     frontier.add(initial_state)
 
     exSet=set()
     print("this is the frontier", frontier)
     while not frontier.is_empty():
+        print_search_status(exSet, frontier)
         lnode = frontier.pop()
         iterations=iterations+1
         if goal_description.is_goal(lnode):
@@ -64,7 +89,6 @@ def graph_search(
             if not frontier.contains(child) and child not in exSet:
                 frontier.add(child)
     return(False,[],iterations,time.time()-start_time)
-
 
 # A global variable used to keep track of the start time of the current search
 start_time = 0
