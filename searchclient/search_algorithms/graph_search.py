@@ -74,9 +74,9 @@ def graph_search(
     frontier.add(initial_state)
 
     exSet=set()
-    print("this is the frontier", frontier)
+    #print("this is the frontier", frontier)
     while not frontier.is_empty():
-        print_search_status(exSet, frontier)
+        #print_search_status(exSet, frontier)
         lnode = frontier.pop()
         iterations=iterations+1
         if goal_description.is_goal(lnode):
