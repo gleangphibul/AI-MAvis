@@ -97,25 +97,34 @@ class FrontierBestFirst:
         # Prepare is called at the beginning of a search and since we will sometimes reuse frontiers for multiple
         # searches, prepares must ensure that state is cleared.
         # Your code here...
-        raise NotImplementedError()
+        self.priority_queue.clear()
+        # raise NotImplementedError()
 
     def f(self, state: h_state.HospitalState, goal_description: h_goal_description.HospitalGoalDescription) -> int:
         raise Exception("FrontierBestFirst should not be directly used. Instead use a subclass overriding f()")
 
     def add(self, state: h_state.HospitalState):
-        raise NotImplementedError()
+        self.priority_queue.add(state, self.f(state, self.goal_description))
+        #raise NotImplementedError()
 
     def pop(self) -> h_state.HospitalState:
-        raise NotImplementedError()
+        return self.priority_queue.pop()
+        #raise NotImplementedError()
 
     def is_empty(self) -> bool:
-        raise NotImplementedError()
+        return self.priority_queue.size() == 0
+        #raise NotImplementedError()
 
     def size(self) -> int:
-        raise NotImplementedError()
+        return self.priority_queue.size()
+        #raise NotImplementedError()
 
     def contains(self, state: h_state.HospitalState) -> bool:
-        raise NotImplementedError()
+        if (self.priority_queue.get_priority(h_state.HospitalState) == None):
+            return False
+        else:
+            return True
+        #raise NotImplementedError()
 
 
 # The FrontierAStar and FrontierGreedy classes extend the FrontierBestFirst class, that is, they are
@@ -126,8 +135,14 @@ class FrontierAStar(FrontierBestFirst):
         super().__init__()
         self.heuristic = heuristic
 
+    # Returns cost evaluation (f function)
     def f(self, state: h_state.HospitalState, goal_description: h_goal_description.HospitalGoalDescription) -> int:
-        raise NotImplementedError()
+        h = self.heuristic.h(state, self.goal_description)
+        g = state.path_cost
+        # print(g)
+        f = h + g
+        return h
+        #raise NotImplementedError()
         
 
 class FrontierGreedy(FrontierBestFirst):
@@ -136,6 +151,10 @@ class FrontierGreedy(FrontierBestFirst):
         super().__init__()
         self.heuristic = heuristic
 
+    # Returns cost evaluation (f function)
     def f(self, state: h_state.HospitalState, goal_description: h_goal_description.HospitalGoalDescription) -> int:
-        raise NotImplementedError()
+
+        f = self.heuristic.h(state, self.goal_description)
+        return f
+        #raise NotImplementedError()
     
