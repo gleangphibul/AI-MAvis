@@ -51,12 +51,17 @@ class HospitalGoalCountHeuristics:
         pass
        #raise NotImplementedError()
     
-    def h(self, state: h_state.HospitalState, 
-                goal_description: h_goal_description.HospitalGoalDescription) -> int:
-        # your code here...
-        int total_goals = goal_description.goals
-        
-        raise NotImplementedError()
+    def h(self, state: h_state.HospitalState,goal_description: h_goal_description.HospitalGoalDescription) -> int:
+        remaining_goals = 0
+        for goal in goal_description.agent_goals:
+            pos=state.agent_at(goal[0])
+            if pos==-1 or pos[1]!=goal[1]:
+                remaining_goals+=1
+        for goal in goal_description.box_goals:
+            pos=state.box_at(goal[0])
+            if pos==-1 or pos[1]!=goal[1]:
+                remaining_goals+=1
+        return remaining_goals
 
 class HospitalAdvancedHeuristics:
 
