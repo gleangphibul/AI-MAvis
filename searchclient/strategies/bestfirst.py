@@ -120,7 +120,7 @@ class FrontierBestFirst:
         #raise NotImplementedError()
 
     def contains(self, state: h_state.HospitalState) -> bool:
-        if (self.priority_queue.get_priority(h_state.HospitalState) == None):
+        if self.priority_queue.get_priority(state) is None:
             return False
         else:
             return True
@@ -137,11 +137,11 @@ class FrontierAStar(FrontierBestFirst):
 
     # Returns cost evaluation (f function)
     def f(self, state: h_state.HospitalState, goal_description: h_goal_description.HospitalGoalDescription) -> int:
-        h = self.heuristic.h(state, self.goal_description)
+        h = self.heuristic.h(state,goal_description)
         g = state.path_cost
         # print(g)
         f = h + g
-        return h
+        return f
         #raise NotImplementedError()
         
 
