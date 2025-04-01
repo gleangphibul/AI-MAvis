@@ -1,0 +1,25 @@
+#domain
+hospital
+#levelname
+DebugTwo
+#colors
+blue: 0,1,A,B,C,D
+#initial
+++++++++
++      +
++ 0 A  +
++      +
++B  A  +
++B     +
++1     +
+++++++++
+#goal
+++++++++
++      +
++     A+
++      +
++     A+
++      +
++    B +
+++++++++
+#end
