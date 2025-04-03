@@ -9,7 +9,7 @@ from searchclient.agent_types.classic import *
 
 # Import all action classes (used for hardcoding solutions) and actions libraries
 from searchclient.domains.hospital.actions import (
-    NoOpAction, MoveAction, PushAction, PullAction, AnyAction, DEFAULT_MAPF_ACTION_LIBRARY, DEFAULT_HOSPITAL_ACTION_LIBRARY
+    NoOpAction, MoveAction, PushAction, PullAction, AnyAction, DEFAULT_HOSPITAL_ACTION_LIBRARY
 )
 
 # Import state, goal description and level classes for the MAvis hospital environment
@@ -34,6 +34,12 @@ from searchclient.domains.hospital.heuristics import (
 import sys
 path1= sys.argv[2]
 path='levels/'+path1+'.lvl'
+trials=int(sys.argv[8])
+heuristic_name = sys.argv[6]
+strategy_name = sys.argv[4]
+
+
+
 # Function to load a level file
 def load_level_file_from_path(path):
     with open(path, "r") as f:
@@ -100,22 +106,19 @@ initial_state = HospitalState(level, level.initial_agent_positions, level.initia
 goal_description = HospitalGoalDescription(level, level.box_goals + level.agent_goals)
 
 
-action_library = DEFAULT_MAPF_ACTION_LIBRARY
+action_library = DEFAULT_HOSPITAL_ACTION_LIBRARY
 
 action_set = [action_library] * level.num_agents
 
 
-heuristic_name = "zero" 
 heuristic = {
         'zero': HospitalZeroHeuristic,
         'goalcount': HospitalGoalCountHeuristics,
         'advanced': HospitalAdvancedHeuristics,
     }.get(heuristic_name, HospitalZeroHeuristic)() # make sure you understand what .get() does
 
-print('\n')
-print('BFS START')
+
 # Finally, let's pick the search strategy and fetch the relevant frontier
-strategy_name = "bfs" 
 frontier = {
         'bfs': FrontierBFS,
         'dfs': FrontierDFS,
@@ -123,8 +126,7 @@ frontier = {
         'greedy': lambda: FrontierGreedy(heuristic)
     }.get(strategy_name, FrontierBFS)() # make sure you understand what .get() does
 
-n_trials = 1
-
+n_trials = trials
 plans, sol_lengths, generated, elapsed = [], [], [], []
 for n in tqdm(range(n_trials)):
     planning_success, plan, num_generated, elapsed_time = graph_search(initial_state, action_set, goal_description, frontier)
@@ -133,7 +135,7 @@ for n in tqdm(range(n_trials)):
     generated.append(int(num_generated))
     elapsed.append(elapsed_time)
 
-
+render_plan(level_path, plan, strategy_name, heuristic_name, num_generated, elapsed_time, len(plan))
 # The graph search function returns the following:
 print('Average solution legth:', np.mean(sol_lengths))
 print('Solution length variance :', np.var(sol_lengths))
@@ -141,30 +143,3 @@ print('Average number of states generated:', np.mean(generated))
 print('Number of states generated variance :', np.var(generated))
 
 print('\n')
-print('DFS START')
-strategy_name = "dfs" 
-frontier = {
-        'bfs': FrontierBFS,
-        'dfs': FrontierDFS,
-        'astar': lambda: FrontierAStar(heuristic),
-        'greedy': lambda: FrontierGreedy(heuristic)
-    }.get(strategy_name, FrontierBFS)() # make sure you understand what .get() does
-
-n_trials = 1
-
-plans, sol_lengths, generated, elapsed = [], [], [], []
-for n in tqdm(range(n_trials)):
-    planning_success, plan, num_generated, elapsed_time = graph_search(initial_state, action_set, goal_description, frontier)
-    plans.append(plan)
-    sol_lengths.append(len(plan))
-    generated.append(int(num_generated))
-    elapsed.append(elapsed_time)
-
-
-# The graph search function returns the following:
-print('Average solution legth:', np.mean(sol_lengths))
-print('Solution length variance :', np.var(sol_lengths))
-print('Average number of states generated:', np.mean(generated))
-print('Number of states generated variance :', np.var(generated))
-
-
