@@ -77,14 +77,28 @@ class HospitalAdvancedHeuristics:
 
    
     def h(self, state: h_state.HospitalState, goal_description: h_goal_description.HospitalGoalDescription) -> int:
-        agent_box_index=0
-        positions=state.agent_positions+state.box_positions
         h=0
-        for goal in goal_description.goals:
-            goal_id=goal[1]
-            goal_location=goal[0]
-            current_location=positions[agent_box_index][0]
-            h=h+(abs(goal_location[0]-current_location[0])+abs(goal_location[1]-current_location[1]))
-            agent_box_index=agent_box_index+1
-        print("Heuristic value: ",h)
-        return h/len(positions)
+
+        for goal_pos, goal_idx in goal_description.agent_goals:
+            for agent_pos, agent_idx in state.agent_positions:
+                if goal_idx == agent_idx:
+                   h=h+abs((goal_pos[0]-agent_pos[0])+(abs(goal_pos[1]-agent_pos[1])))
+                    
+            
+        for goal_pos, goal_idx in goal_description.box_goals:
+            prior=None
+            for box_pos, box_idx in state.box_positions:
+                
+                if goal_idx == box_idx:
+                   distance=abs((goal_pos[0]-box_pos[0])+(abs(goal_pos[1]-box_pos[1])))
+                   if prior is None:
+                       prior = distance
+                   if(distance<prior):
+                       prior=distance
+            if prior is None:
+                prior =0
+            h=h+prior
+        print("Heuristic: {}".format(h))
+        return h
+   
+   
